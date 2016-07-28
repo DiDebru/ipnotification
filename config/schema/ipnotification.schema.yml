@@ -12,5 +12,7 @@ ipnotification.ipnotification.*:
       type: string
     email:
       type: string
+      label: 'E-mail'
     ip:
       type: string
+      label: 'IP'

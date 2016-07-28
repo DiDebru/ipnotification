@@ -41,18 +41,14 @@ class IPnotificationForm extends EntityForm {
     $form['ip'] = [
       '#type' => 'textfield',
       '#default_value' => $ipnotification->getIp(),
-      '#machine_name' => [
-        'exists' => '\Drupal\ipnotification\Entity\IPnotification::load',
-      ],
+      '#description' => $this->t("Comma sperated list with IPs"),
       '#required' => TRUE,
     ];
 
     $form['email'] = [
       '#type' => 'textfield',
       '#default_value' => $ipnotification->id(),
-      '#machine_name' => [
-        'exists' => '\Drupal\ipnotification\Entity\IPnotification::load',
-      ],
+      '#description' => $this->t("Comma sperated list with emails"),
       '#required' => TRUE,
     ];
 

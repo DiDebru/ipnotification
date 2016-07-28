@@ -5,7 +5,12 @@
  * Contains ipnotification.module..
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\ipnotification\Controller\IpNotificationMailController;
+use Drupal\ipnotification\Entity;
+use Drupal\ipnotification\IpNotificationSendMail;
+
 
 /**
  * Implements hook_help().
@@ -21,5 +26,27 @@ function ipnotification_help($route_name, RouteMatchInterface $route_match) {
 
     default:
  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ */
+function ipnotification_entity_insert(EntityInterface $entity) {
+  $currentip = \Drupal::request()->getClientIp();
+  $checker = new IpNotificationSendMail();
+  $checker->ip_check_mail_send($currentip, $entity);
+}
+
+/**
+ * Implements hook_user_login().
+ *
+ * @param $account
+ *
+ */
+function ipnotification_user_login() {
+  $checker = new IpNotificationSendMail();
+  $checker->email_check_mail_send();
 }
 

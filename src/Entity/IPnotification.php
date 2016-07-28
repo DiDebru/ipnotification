@@ -26,9 +26,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
- *     "uuid" = "uuid",
- *     "email" = "email",
- *     "ip" = "ip"
+ *     "uuid" = "uuid", *
  *   },
  *   links = {
  *     "canonical" = "/admin/config/people/ipnotification/{ipnotification}",
