@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains ipnotification.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ipnotification_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the ipnotification module.
+    case 'help.page.ipnotification':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Notify administrators when users with specified IPs appear.') . '</p>';
+      return $output;
+
+    default:
+  }
+}

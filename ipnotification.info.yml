@@ -1,0 +1,5 @@
+name: ipnotification
+type: module
+description: Notify administrators when users with specified IPs appear.
+core: 8.x
+package: ip_notification
