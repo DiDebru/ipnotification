@@ -3,6 +3,6 @@ entity.ipnotification.collection:
   title: 'IP notification'
   route_name: entity.ipnotification.collection
   description: 'Admister IP notification'
-  parent: system.admin_config_people
+  parent: user.admin_index
   weight: 99
 

@@ -1,6 +1,8 @@
 <?php
 
 namespace Drupal\ipnotification;
+use Drupal\Core\Entity\Entity;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\ipnotification\Entity\IPnotification;
 
 /**
@@ -23,9 +25,9 @@ class IpNotificationSendMail implements IpNotificationSendMailInterface {
    * @return string
    *
    */
-  public function ip_check_mail_send($current_ip, EntityTypeManager $element) {
+  public function ip_check_mail_send($current_ip, EntityInterface $element) {
     global $base_url;
-    $ipnotification = new IPnotification();
+    $ipnotification = IPnotification::create();
     $ips = $ipnotification->getIp();
     $url = \Drupal::service('path.current')->getPath();
     $check = preg_match($current_ip, $ips);
@@ -52,7 +54,7 @@ class IpNotificationSendMail implements IpNotificationSendMailInterface {
   public function email_check_mail_send() {
     global $base_url;
     global $user;
-    $ipnotification = new IPnotification();
+    $ipnotification = IPnotification::create();
     $ips = $ipnotification->getIp();
 
     // Check which email domains where used by the user.
