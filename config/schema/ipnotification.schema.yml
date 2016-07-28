@@ -1,0 +1,16 @@
+ipnotification.ipnotification.*:
+  type: config_entity
+  label: 'Ipnotification config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string
+    email:
+      type: string
+    ip:
+      type: string

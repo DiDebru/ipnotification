@@ -1,0 +1,8 @@
+# Ipnotification menu items definition
+entity.ipnotification.collection:
+  title: 'Ipnotification'
+  route_name: entity.ipnotification.collection
+  description: 'List Ipnotification (bundles)'
+  parent: system.admin_structure
+  weight: 99
+
