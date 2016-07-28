@@ -9,5 +9,25 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
  */
 interface IPnotificationInterface extends ConfigEntityInterface {
 
-  // Add get/set methods for your configuration properties here.
+
+  /**
+   * @return string
+   */
+  public function getEmail();
+
+
+  /**
+   * @param string $email
+   */
+  public function setEmail($email);
+
+  /**
+   * @return string
+   */
+  public function getIp();
+
+  /**
+   * @param string $ip
+   */
+  public function setIp($ip);
 }

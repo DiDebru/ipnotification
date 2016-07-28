@@ -4,6 +4,7 @@ namespace Drupal\ipnotification\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\Validator\Constraints\True;
 
 /**
  * Class IPnotificationForm.
@@ -17,7 +18,7 @@ class IPnotificationForm extends EntityForm {
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
-
+    /** @var \Drupal\ipnotification\Entity\IPnotification $ipnotification */
     $ipnotification = $this->entity;
     $form['label'] = [
       '#type' => 'textfield',
@@ -37,7 +38,23 @@ class IPnotificationForm extends EntityForm {
       '#disabled' => !$ipnotification->isNew(),
     ];
 
-    /* You will need additional form elements for your custom properties. */
+    $form['ip'] = [
+      '#type' => 'textfield',
+      '#default_value' => $ipnotification->getIp(),
+      '#machine_name' => [
+        'exists' => '\Drupal\ipnotification\Entity\IPnotification::load',
+      ],
+      '#required' => TRUE,
+    ];
+
+    $form['email'] = [
+      '#type' => 'textfield',
+      '#default_value' => $ipnotification->id(),
+      '#machine_name' => [
+        'exists' => '\Drupal\ipnotification\Entity\IPnotification::load',
+      ],
+      '#required' => TRUE,
+    ];
 
     return $form;
   }
