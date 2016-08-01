@@ -27,7 +27,6 @@ class IpNotificationSendMail implements IpNotificationSendMailInterface {
    *    returns number of times ip matches.
    */
   public function ipCheckMailSend($current_ip, EntityInterface $element, $ids) {
-    global $base_url;
     foreach ($ids as $id) {
       /** @var \Drupal\ipnotification\Entity\IPnotification $entity */
       $entity = \Drupal::entityTypeManager()->getStorage('ipnotification')->load($id);
