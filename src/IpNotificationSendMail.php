@@ -1,6 +1,7 @@
 <?php
 
 namespace Drupal\ipnotification;
+
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
