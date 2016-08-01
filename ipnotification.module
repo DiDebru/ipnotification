@@ -39,11 +39,12 @@ function ipnotification_entity_insert(EntityInterface $entity) {
 /**
  * Implements hook_user_login().
  */
-function ipnotification_user_login($currentip, $ids) {
+function ipnotification_user_login() {
+  $currentip = \Drupal::request()->getClientIp();
   $checker = new IpNotificationSendMail();
   /** @var \Drupal\ipnotification\Entity\IPnotification $ipnotification */
   $ids = \Drupal::entityQuery('ipnotification')->execute();
-  $checker->emailCheckMailSend($ids);
+  $checker->emailCheckMailSend($currentip, $ids);
 }
 
 /**
