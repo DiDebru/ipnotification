@@ -4,7 +4,6 @@ namespace Drupal\ipnotification\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\Validator\Constraints\True;
 
 /**
  * Class IPnotificationForm.

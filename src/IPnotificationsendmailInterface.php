@@ -5,11 +5,11 @@ namespace Drupal\ipnotification;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Interface IpNotificationSendMailInterface.
+ * Interface IPnotificationsendmailInterface.
  *
  * @package Drupal\ipnotification
  */
-interface IpNotificationSendMailInterface {
+interface IPnotificationsendmailInterface {
 
   /**
    * Function to check user IP when inserting a new entity.

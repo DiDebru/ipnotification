@@ -7,11 +7,11 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 
 /**
- * Class IpNotificationSendMail.
+ * Class IPnotificationsendmail.
  *
  * @package Drupal\ipnotification
  */
-class IpNotificationSendMail implements IpNotificationSendMailInterface {
+class IPnotificationsendmail implements IPnotificationsendmailInterface {
 
   /**
    * Constructor.

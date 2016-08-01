@@ -7,7 +7,7 @@
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\ipnotification\IpNotificationSendMail;
+use Drupal\ipnotification\IPnotificationsendmail;
 
 /**
  * Implements hook_help().
@@ -30,7 +30,7 @@ function ipnotification_help($route_name, RouteMatchInterface $route_match) {
  */
 function ipnotification_entity_insert(EntityInterface $entity) {
   $currentip = \Drupal::request()->getClientIp();
-  $checker = new IpNotificationSendMail();
+  $checker = new IPnotificationsendmail();
   /** @var \Drupal\ipnotification\Entity\IPnotification $ipnotification */
   $ids = \Drupal::entityQuery('ipnotification')->execute();
   $checker->ipCheckMailSend($currentip, $entity, $ids);
@@ -41,7 +41,7 @@ function ipnotification_entity_insert(EntityInterface $entity) {
  */
 function ipnotification_user_login() {
   $currentip = \Drupal::request()->getClientIp();
-  $checker = new IpNotificationSendMail();
+  $checker = new IPnotificationsendmail();
   /** @var \Drupal\ipnotification\Entity\IPnotification $ipnotification */
   $ids = \Drupal::entityQuery('ipnotification')->execute();
   $checker->emailCheckMailSend($currentip, $ids);
