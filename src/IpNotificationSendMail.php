@@ -44,7 +44,7 @@ class IpNotificationSendMail implements IpNotificationSendMailInterface {
                   '!element' => $element->id(),
                   '!current_ip' => check_markup($current_ip),
                   '!url' => Link::fromTextAndUrl(t('Insert'), Url::fromRoute(['absolute' => TRUE])),
-                  '!currenturl' => $base_url . $url,
+                  '!currenturl' => \Drupal::service('path.current'),
                 ));
       $mailkey = 'ipnotification';
       $to = $entity->getEmail();
