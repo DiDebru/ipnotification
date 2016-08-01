@@ -1,7 +1,6 @@
 <?php
 
 namespace Drupal\ipnotification;
-use Drupal\Core\Entity\Entity;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
@@ -12,14 +11,19 @@ use Drupal\Core\Entity\EntityInterface;
 interface IpNotificationSendMailInterface {
 
   /**
-   * @param $current_ip
-   * @param \Drupal\ipnotification\EntityInterface $element
+   * Function to check user IP when inserting a new entity.
+   *
    * @return mixed
+   *    returns check
    */
-  public function ip_check_mail_send($current_ip, EntityInterface $element);
+  public function ipCheckMailSend($current_ip, EntityInterface $element, $ids);
 
   /**
+   * Function to check user IP while log in.
+   *
    * @return mixed
+   *   returns check
    */
-  public function email_check_mail_send();
+  public function emailCheckMailSend($current_ip, $ids);
+
 }

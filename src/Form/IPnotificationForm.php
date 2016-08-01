@@ -47,7 +47,7 @@ class IPnotificationForm extends EntityForm {
 
     $form['email'] = [
       '#type' => 'textfield',
-      '#default_value' => $ipnotification->id(),
+      '#default_value' => $ipnotification->getEmail(),
       '#description' => $this->t("Comma sperated list with emails"),
       '#required' => TRUE,
     ];

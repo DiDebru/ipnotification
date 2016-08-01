@@ -4,7 +4,6 @@ namespace Drupal\ipnotification;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\ipnotification\Entity\IPnotification;
 
 /**
  * Class IpNotificationSendMail.
@@ -26,27 +25,33 @@ class IpNotificationSendMail implements IpNotificationSendMailInterface {
    * @return string
    *    returns number of times ip matches.
    */
-  public function ipCheckMailSend($current_ip, EntityInterface $element) {
+  public function ipCheckMailSend($current_ip, EntityInterface $element, $ids) {
     global $base_url;
-    $ipnotification = IPnotification::create();
-    $ips = $ipnotification->getIp();
+    foreach ($ids as $id) {
+      /** @var \Drupal\ipnotification\Entity\IPnotification $entity */
+      $entity = \Drupal::entityTypeManager()->getStorage('ipnotification')->load($id);
+      $ips = [];
+      array_push($ips, $entity->getIp());
+    }
     $url = \Drupal::service('path.current')->getPath();
-    $check = preg_match($current_ip, $ips);
-
-    if ($check >= 1) {
-      $body = t('A new !element has been inserted from IP !current_ip !currenturl \n To !url',
+    $pattern = "/" . $current_ip . "/i";
+    foreach ($ips as $ip) {
+      $check = preg_match($pattern, $ip);
+    }
+    if ($check) {
+      $params['message'] = t('A new !element has been inserted from IP !current_ip !currenturl \n To !url',
                 array(
                   '!element' => $element->id(),
-                  '!current_ip' => check_plain($current_ip),
-                  '!url' => Link::fromTextAndUrl(t('Insert'), Url::fromUri($base_url . '/node/' . $element->id())),
+                  '!current_ip' => check_markup($current_ip),
+                  '!url' => Link::fromTextAndUrl(t('Insert'), Url::fromRoute(['absolute' => TRUE])),
                   '!currenturl' => $base_url . $url,
                 ));
       $mailkey = 'ipnotification';
-      $to = $ipnotification->getEmail();
-      $subject = t('New entry');
-      $from = 'Community';
-      $header = array('Content-Type' => 'text/html; charset=UTF-8; format=flowed');
-      \Drupal::service('plugin.manager.mail')->mail('ipnotification', $mailkey, $to, $subject, $body, $from, $header);
+      $to = $entity->getEmail();
+      $params['subject'] = t('New entry');
+      $langcode = \Drupal::currentUser()->getPreferredLangcode();
+
+      \Drupal::service('plugin.manager.mail')->mail('ipnotification', $mailkey, $to, $langcode, $params, NULL, TRUE);
     }
     return $check;
   }
@@ -57,32 +62,36 @@ class IpNotificationSendMail implements IpNotificationSendMailInterface {
    * @return int
    *    returns number of times ip matches.
    */
-  public function emailCheckMailSend() {
-    global $base_url;
+  public function emailCheckMailSend($currentip, $ids) {
     $user = \Drupal::currentUser();
-    $ipnotification = IPnotification::create();
-    $ips = $ipnotification->getIp();
+    foreach ($ids as $id) {
+      /** @var \Drupal\ipnotification\Entity\IPnotification $entity */
+      $entity = \Drupal::entityTypeManager()->getStorage('ipnotification')->load($id);
+      $ips = [];
+      array_push($ips, $entity->getIp());
+    }
 
-    // Check which email domains where used by the user.
-    $emaildomain = explode("@", $user->getEmail());
-    $emaildomain = "%@" . $emaildomain[1];
-    $check      = preg_match($emaildomain, $ips);
-    $check      = preg_match($user->getEmail(), $ips) + $check;
+    // Check IP from user.
+    $pattern = "/" . $currentip . "/i";
 
-    if ($check >= 1) {
-      $body = t('The user !username with <b>!mail</b> has logged in.<br><br> \n To !url',
+    foreach ($ips as $ip) {
+      $check = preg_match($pattern, $ip);
+    }
+    if ($check) {
+      $params['message'] = t('The user !username with <b>!mail</b> has logged in.<br><br> \n To !url',
         array(
           '!username' => $user->getDisplayName(),
           '!mail' => $user->getEmail(),
-          '!url' => Link::fromTextAndUrl(t('Profile'), Url::fromUri($base_url . '/user/' . $user->id())),
-        ));
+          '!url' => Link::fromTextAndUrl(t('Profile'), Url::fromRoute(['absolute' => TRUE])),
+        )
+      );
 
       $mailkey = 'ipnotification';
-      $to = $ipnotification->getEmail();
-      $subject = t('New login');
-      $from = 'Community';
-      $header = array('Content-Type' => 'text/html; charset=UTF-8; format=flowed');
-      \Drupal::service('plugin.manager.mail')->mail('ipnotification', $mailkey, $to, $subject, $body, $from, $header);
+      $to = $entity->getEmail();
+      $params['subject'] = t('New login');
+      $langcode = \Drupal::currentUser()->getPreferredLangcode();
+
+      \Drupal::service('plugin.manager.mail')->mail('ipnotification', $mailkey, $to, $langcode, $params, NULL, TRUE);
 
     }
     return $check;

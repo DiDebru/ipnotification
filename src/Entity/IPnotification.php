@@ -55,42 +55,53 @@ class IPnotification extends ConfigEntityBase implements IPnotificationInterface
 
   /**
    * The Ipnotification emails.
-   * @todo parse array to string
+   *
    * @var string
    */
   protected $email;
 
   /**
    * The Ipnotification ips.
-   * @todo parse array to string
+   *
    * @var string
    */
   protected $ip;
 
-
   /**
+   * Get the email of an entity of type ipnotification.
+   *
    * @return string
+   *    returns the email
    */
   public function getEmail() {
     return $this->email;
   }
 
   /**
+   * Set the email.
+   *
    * @param string $email
+   *    Mail.
    */
   public function setEmail($email) {
     $this->email = $email;
   }
 
   /**
+   * Get the IP of an entity of type ipnotification.
+   *
    * @return string
+   *    returns the IP
    */
   public function getIp() {
     return $this->ip;
   }
 
   /**
+   * Set the IP.
+   *
    * @param string $ip
+   *    The IP.
    */
   public function setIp($ip) {
     $this->ip = $ip;

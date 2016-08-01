@@ -7,9 +7,7 @@
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\ipnotification\Entity;
 use Drupal\ipnotification\IpNotificationSendMail;
-
 
 /**
  * Implements hook_help().
@@ -24,39 +22,39 @@ function ipnotification_help($route_name, RouteMatchInterface $route_match) {
       return $output;
 
     default:
- }
+  }
 }
 
 /**
  * Implements hook_entity_insert().
- *
- * @param \Drupal\Core\Entity\EntityInterface $entity
  */
 function ipnotification_entity_insert(EntityInterface $entity) {
   $currentip = \Drupal::request()->getClientIp();
   $checker = new IpNotificationSendMail();
-  $checker->ipCheckMailSend($currentip, $entity);
+  /** @var \Drupal\ipnotification\Entity\IPnotification $ipnotification */
+  $ids = \Drupal::entityQuery('ipnotification')->execute();
+  $checker->ipCheckMailSend($currentip, $entity, $ids);
 }
 
 /**
  * Implements hook_user_login().
- *
- * @param $account
- *
  */
-function ipnotification_user_login() {
+function ipnotification_user_login($currentip, $ids) {
   $checker = new IpNotificationSendMail();
-  $checker->emailCheckMailSend();
+  /** @var \Drupal\ipnotification\Entity\IPnotification $ipnotification */
+  $ids = \Drupal::entityQuery('ipnotification')->execute();
+  $checker->emailCheckMailSend($ids);
 }
 
 /**
- * Implement hook_mail().
- *
- * @param $key
- * @param $message
- * @param $params
+ * Implements hook_mail().
  */
 function ipnotification_mail($key, &$message, $params) {
-
+  switch ($key) {
+    case 'ipnotification':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = $params['subject'];
+      $message['body'] = $params['message'];
+      break;
+  }
 }
-
