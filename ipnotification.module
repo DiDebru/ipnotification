@@ -8,6 +8,7 @@
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\ipnotification\IPnotificationsendmail;
+use Drupal\user\Plugin\views\argument_default\CurrentUser;
 
 /**
  * Implements hook_help().
@@ -30,10 +31,13 @@ function ipnotification_help($route_name, RouteMatchInterface $route_match) {
  */
 function ipnotification_entity_insert(EntityInterface $entity) {
   $currentip = \Drupal::request()->getClientIp();
-  $checker = new IPnotificationsendmail();
-  /** @var \Drupal\ipnotification\Entity\IPnotification $ipnotification */
+  $user = \Drupal::currentUser();
+  $url = \Drupal::service('path.current');
+  $mail = \Drupal::service('plugin.manager.mail');
   $ids = \Drupal::entityQuery('ipnotification')->execute();
-  $checker->ipCheckMailSend($currentip, $entity, $ids);
+  list($ips, $emails) = get_emails_and_ips($ids);
+  $checker = new IPnotificationsendmail($ips, $user, $url, $mail, $emails);
+  $checker->ipCheckMailSend($currentip, $entity);
 }
 
 /**
@@ -41,10 +45,14 @@ function ipnotification_entity_insert(EntityInterface $entity) {
  */
 function ipnotification_user_login() {
   $currentip = \Drupal::request()->getClientIp();
-  $checker = new IPnotificationsendmail();
-  /** @var \Drupal\ipnotification\Entity\IPnotification $ipnotification */
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $user = \Drupal::currentUser();
+  $url = \Drupal::service('path.current');
+  $mail = \Drupal::service('plugin.manager.mail');
   $ids = \Drupal::entityQuery('ipnotification')->execute();
-  $checker->emailCheckMailSend($currentip, $ids);
+  list($ips, $emails) = get_emails_and_ips($ids);
+  $checker = new IPnotificationsendmail($ips, $user, $url, $mail, $emails);
+  $checker->emailCheckMailSend($currentip);
 }
 
 /**
@@ -58,4 +66,26 @@ function ipnotification_mail($key, &$message, $params) {
       $message['body'] = $params['message'];
       break;
   }
+}
+
+/**
+ * Function to get the Ips and emails of all ipnotification bundles.
+ *
+ * @param array $ids
+ *    Array of bundle ids.
+ *
+ * @return array
+ *    Array with two arrays.
+ */
+function get_emails_and_ips($ids) {
+  $ips = [];
+  $emails = [];
+  $ids = \Drupal::entityQuery('ipnotification')->execute();
+  foreach ($ids as $id) {
+    /** @var \Drupal\ipnotification\Entity\IPnotification $ipnotification */
+    $ipnotification = \Drupal::entityTypeManager()->getStorage('ipnotification')->load($id);
+    array_push($ips, $ipnotification->getIp());
+    array_push($emails, $ipnotification->getEmail());
+  }
+  return [$ips, $emails];
 }

@@ -12,12 +12,50 @@ use Drupal\Core\Url;
  * @package Drupal\ipnotification
  */
 class IPnotificationsendmail implements IPnotificationsendmailInterface {
+  /**
+   * Array of ips.
+   *
+   * @var array of ips
+   */
+  protected $ips;
+
+  /**
+   * User object.
+   *
+   * @var user object
+   */
+  protected $user;
+
+  /**
+   * Url object.
+   *
+   * @var url object
+   */
+  protected $url;
+
+  /**
+   * Mail object.
+   *
+   * @var mail object
+   */
+  protected $mail;
+
+  /**
+   * Array of emails.
+   *
+   * @var array of emails
+   */
+  protected $emails;
 
   /**
    * Constructor.
    */
-  public function __construct() {
-
+  public function __construct($ips, $user, $url, $mail, $emails) {
+    $this->ips = $ips;
+    $this->user = $user;
+    $this->url = $url;
+    $this->mail = $mail;
+    $this->emails = $emails;
   }
 
   /**
@@ -26,16 +64,10 @@ class IPnotificationsendmail implements IPnotificationsendmailInterface {
    * @return string
    *    returns number of times ip matches.
    */
-  public function ipCheckMailSend($current_ip, EntityInterface $element, $ids) {
-    foreach ($ids as $id) {
-      /** @var \Drupal\ipnotification\Entity\IPnotification $entity */
-      $entity = \Drupal::entityTypeManager()->getStorage('ipnotification')->load($id);
-      $ips = [];
-      array_push($ips, $entity->getIp());
-    }
-    $url = \Drupal::service('path.current')->getPath();
+  public function ipCheckMailSend($current_ip, EntityInterface $element) {
+    $url = $this->url->getPath();
     $pattern = "/" . $current_ip . "/i";
-    foreach ($ips as $ip) {
+    foreach ($this->ips as $ip) {
       $check = preg_match($pattern, $ip);
     }
     if ($check) {
@@ -44,14 +76,14 @@ class IPnotificationsendmail implements IPnotificationsendmailInterface {
                   '!element' => $element->id(),
                   '!current_ip' => check_markup($current_ip),
                   '!url' => Link::fromTextAndUrl(t('Insert'), Url::fromRoute(['absolute' => TRUE])),
-                  '!currenturl' => \Drupal::service('path.current'),
+                  '!currenturl' => $this->url,
                 ));
       $mailkey = 'ipnotification';
-      $to = $entity->getEmail();
+      $to = implode(',', $this->emails);
       $params['subject'] = t('New entry');
-      $langcode = \Drupal::currentUser()->getPreferredLangcode();
+      $langcode = $this->user->getPreferredLangcode();
 
-      \Drupal::service('plugin.manager.mail')->mail('ipnotification', $mailkey, $to, $langcode, $params, NULL, TRUE);
+      $this->mail->mail('ipnotification', $mailkey, $to, $langcode, $params, NULL, TRUE);
     }
     return $check;
   }
@@ -62,36 +94,27 @@ class IPnotificationsendmail implements IPnotificationsendmailInterface {
    * @return int
    *    returns number of times ip matches.
    */
-  public function emailCheckMailSend($currentip, $ids) {
-    $user = \Drupal::currentUser();
-    foreach ($ids as $id) {
-      /** @var \Drupal\ipnotification\Entity\IPnotification $entity */
-      $entity = \Drupal::entityTypeManager()->getStorage('ipnotification')->load($id);
-      $ips = [];
-      array_push($ips, $entity->getIp());
-    }
-
+  public function emailCheckMailSend($currentip) {
     // Check IP from user.
     $pattern = "/" . $currentip . "/i";
-
-    foreach ($ips as $ip) {
+    foreach ($this->ips as $ip) {
       $check = preg_match($pattern, $ip);
     }
     if ($check) {
       $params['message'] = t('The user !username with <b>!mail</b> has logged in.<br><br> \n To !url',
         array(
-          '!username' => $user->getDisplayName(),
-          '!mail' => $user->getEmail(),
+          '!username' => $this->user->getDisplayName(),
+          '!mail' => $this->user->getEmail(),
           '!url' => Link::fromTextAndUrl(t('Profile'), Url::fromRoute(['absolute' => TRUE])),
         )
       );
 
       $mailkey = 'ipnotification';
-      $to = $entity->getEmail();
+      $to = implode(',', $this->emails);
       $params['subject'] = t('New login');
-      $langcode = \Drupal::currentUser()->getPreferredLangcode();
+      $langcode = $this->user->getPreferredLangcode();
 
-      \Drupal::service('plugin.manager.mail')->mail('ipnotification', $mailkey, $to, $langcode, $params, NULL, TRUE);
+      $this->mail->mail('ipnotification', $mailkey, $to, $langcode, $params, NULL, TRUE);
 
     }
     return $check;

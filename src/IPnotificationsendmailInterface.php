@@ -17,7 +17,7 @@ interface IPnotificationsendmailInterface {
    * @return mixed
    *    returns check
    */
-  public function ipCheckMailSend($current_ip, EntityInterface $element, $ids);
+  public function ipCheckMailSend($current_ip, EntityInterface $element);
 
   /**
    * Function to check user IP while log in.
@@ -25,6 +25,6 @@ interface IPnotificationsendmailInterface {
    * @return mixed
    *   returns check
    */
-  public function emailCheckMailSend($current_ip, $ids);
+  public function emailCheckMailSend($current_ip);
 
 }
