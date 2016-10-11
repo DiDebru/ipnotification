@@ -1,6 +1,0 @@
-entity.ipnotification.add_form:
-  route_name: 'entity.ipnotification.add_form'
-  title: 'Add Ipnotification'
-  appears_on:
-    - entity.ipnotification.collection
-

@@ -1,8 +1,0 @@
-# Ipnotification menu items definition
-entity.ipnotification.collection:
-  title: 'IP notification'
-  route_name: entity.ipnotification.collection
-  description: 'Admister IP notification'
-  parent: user.admin_index
-  weight: 99
-

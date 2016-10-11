@@ -1,5 +1,0 @@
-services:
-  ipnotification.send_mail:
-    class: Drupal\ipnotification\IPnotificationsendmail
-    arguments: []
-
