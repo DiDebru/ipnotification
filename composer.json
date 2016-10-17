@@ -1,0 +1,14 @@
+{
+  "name": "drupal/ipnotification",
+  "type": "drupal-module",
+  "description": "My Awesome Module",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/ipnotification",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/ipnotification",
+    "source": "http://cgit.drupalcode.org/ipnotification"
+  },
+  "require": { }
+}
