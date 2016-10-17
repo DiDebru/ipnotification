@@ -1,5 +1,6 @@
 name: ipnotification
 type: module
-description: My Awesome Module
+description: Notify administrators when users with specified IPs appear.
 core: 8.x
 package: IP Notification
+
