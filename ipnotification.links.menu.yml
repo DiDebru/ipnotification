@@ -1,0 +1,6 @@
+ipnotification.admin_page:
+  title: 'IP notification'
+  description: 'Notfies the sites admin about certain activities from IP or email adresses'
+  route_name: ipnotification.admin_page
+  weight: 10
+  parent: user.admin_index
