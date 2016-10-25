@@ -35,9 +35,14 @@ class Ipnotification {
    *    The IP to store.
    */
   public function storeIp($ip) {
-    $this->database->insert('ipnotification_ip')
-      ->fields(['ip'], [$ip])
-      ->execute();
+    if ($ip == '') {
+      return;
+    }
+    else {
+      $this->database->insert('ipnotification_ip')
+        ->fields(['ip'], [$ip])
+        ->execute();
+    }
   }
 
   /**
@@ -47,9 +52,14 @@ class Ipnotification {
    *    The email to store.
    */
   public function storeEmail($email) {
-    $this->database->insert('ipnotification_email')
-      ->fields(['email'], [$email])
-      ->execute();
+    if ($email == '') {
+      return;
+    }
+    else {
+      $this->database->insert('ipnotification_email')
+        ->fields(['email'], [$email])
+        ->execute();
+    }
   }
 
   /**
