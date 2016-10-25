@@ -3,4 +3,4 @@ type: module
 description: Notify administrators when users with specified IPs appear.
 core: 8.x
 package: IP Notification
-
+configure: ipnotification.admin_page

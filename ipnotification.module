@@ -9,7 +9,7 @@
 /**
  * Implements hook_help().
  */
-function ipnotification_help($route_name, RouteMatchInterface $route_match) {
+function ipnotification_help($route_name, \Drupal\Core\Routing\CurrentRouteMatch $route_match) {
   switch ($route_name) {
     // Main module help for the ipnotification module.
     case 'help.page.ipnotification':

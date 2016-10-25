@@ -1,0 +1,6 @@
+services:
+  ipnotification.service:
+    class: Drupal\ipnotification\Ipnotification
+    arguments: ['@database']
+    tags:
+      - { name: backend_overridable }

@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function ipnotification_schema()  {
+  $schema = [];
+  $schema['ipnotification_ip'] = [
+    'description' => 'Table to store IP\'s.',
+    'fields' => [
+      'ip' => [
+        'description' => 'String IP',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+    ],
+    'primary keys' => [
+      'ip' => ['ip'],
+    ],
+  ];
+
+  $schema['ipnotification_email'] = [
+    'description' => 'Table to store emails.',
+    'fields' => [
+      'email' => [
+        'description' => 'String email',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+    ],
+  ];
+
+  return $schema;
+}
+
