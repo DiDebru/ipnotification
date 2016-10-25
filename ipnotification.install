@@ -1,42 +1,39 @@
 <?php
 
 /**
- * @file
- * Install, update and uninstall functions for the Ban module.
- */
-
-/**
  * Implements hook_schema().
  */
-function ipnotification_schema() {
-  $schema['ipnotification'] = array(
-    'description' => 'Stores banned IP addresses.',
-    'fields' => array(
-      'ipid' => array(
-        'description' => 'Primary Key: unique ID for IP addresses.',
-        'type' => 'serial',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'ip' => array(
-        'description' => 'IP address',
-        'type' => 'varchar_ascii',
-        'length' => 40,
+function ipnotification_schema()  {
+  $schema = [];
+  $schema['ipnotification_ip'] = [
+    'description' => 'Table to store IP\'s.',
+    'fields' => [
+      'ip' => [
+        'description' => 'String IP',
+        'type' => 'varchar',
+        'length' => 255,
         'not null' => TRUE,
         'default' => '',
-      ),
-      'email' => array(
-        'description' => 'Email address',
-        'type' => 'varchar_ascii',
-        'length' => 100,
+      ],
+    ],
+    'primary keys' => [
+      'ip' => ['ip'],
+    ],
+  ];
+
+  $schema['ipnotification_email'] = [
+    'description' => 'Table to store emails.',
+    'fields' => [
+      'email' => [
+        'description' => 'String email',
+        'type' => 'varchar',
+        'length' => 255,
         'not null' => TRUE,
         'default' => '',
-      ),
-    ),
-    'indexes' => array(
-      'ip' => array('ip'),
-    ),
-    'primary key' => array('iid'),
-  );
+      ],
+    ],
+  ];
+
   return $schema;
 }
+

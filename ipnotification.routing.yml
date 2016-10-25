@@ -1,0 +1,17 @@
+ipnotification.admin_page:
+  path: '/admin/config/people/ipnotification/{default_ip}'
+  defaults:
+    _form: '\Drupal\ipnotification\Form\IpnotificationForm'
+    _title: 'IP notification'
+    default_ip: ''
+  requirements:
+    _permission: 'IP notification'
+
+ipnotification.delete:
+  path: '/admin/config/people/ipnotification/delete/{value}'
+  defaults:
+    _form: '\Drupal\ipnotification\Form\IpnotificationDelete'
+    _title: 'Delete IP/Email address'
+    value: ''
+  requirements:
+    _permission: 'IP notification'
