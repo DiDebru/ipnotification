@@ -2,14 +2,16 @@
 
 /**
  * @file
- * Contains ipnotification.module..
+ * The ipnotification module file.
  */
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Routing\CurrentRouteMatch;
 
 /**
  * Implements hook_help().
  */
-function ipnotification_help($route_name, \Drupal\Core\Routing\CurrentRouteMatch $route_match) {
+function ipnotification_help($route_name, CurrentRouteMatch $route_match) {
   switch ($route_name) {
     // Main module help for the ipnotification module.
     case 'help.page.ipnotification':
