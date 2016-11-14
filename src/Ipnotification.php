@@ -3,6 +3,10 @@
 namespace Drupal\ipnotification;
 
 use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\Core\Mail\MailManager;
+use Drupal\Core\Session\AccountProxy;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class Ipnotification.

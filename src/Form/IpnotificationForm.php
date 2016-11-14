@@ -139,7 +139,7 @@ class IpnotificationForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-   if ($form_state->getValue('ip') == '' && $form_state->getValue('email') == '') {
+    if ($form_state->getValue('ip') == '' && $form_state->getValue('email') == '') {
       drupal_set_message($this->t('You have to enter a value for IP address or email address'), 'error');
     }
   }
@@ -152,8 +152,8 @@ class IpnotificationForm extends FormBase {
     $email = trim($form_state->getValue('email'));
     $this->ipNotification->storeIp($ip);
     $this->ipNotification->storeEmail($email);
-    $ipmessage = ($ip == '') ? 'No IP adress' : 'The IP address' . ' ' . $ip;
-    $emailmessage = ($email == '') ? 'no email' : 'the email adress' . ' ' . $email;
+    $ipmessage = ($ip == '') ? 'No IP adress' : 'The IP address ' . $ip;
+    $emailmessage = ($email == '') ? 'no email' : 'the email adress ' . $email;
     if (!$ip == '' || !$email == '') {
       drupal_set_message($this->t('%ip and %email have been saved to watch', array('%ip' => $ipmessage, '%email' => $emailmessage)));
     }
