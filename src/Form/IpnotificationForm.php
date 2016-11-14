@@ -53,9 +53,9 @@ class IpnotificationForm extends FormBase {
     $ips = $this->ipNotification->findAllIps();
     $emails = $this->ipNotification->findAllEmails();
     $rowsips = array();
-    $headerips = array($this->t('IP addresses to notify.'), $this->t('Operations'));
+    $headerips = array($this->t('IP addresses to watch.'), $this->t('Operations'));
     $rowsemails = array();
-    $headeremails = array($this->t('Email addresses to notify.'), $this->t('Operations'));
+    $headeremails = array($this->t('Email addresses to watch.'), $this->t('Operations'));
     if ($ips) {
       foreach ($ips as $ip) {
         $row = array();
@@ -101,11 +101,11 @@ class IpnotificationForm extends FormBase {
       '#size' => 48,
       '#maxlength' => 40,
       '#defaul_value' => '',
-      '#description' => $this->t('Enter IP addresse'),
+      '#description' => $this->t('Enter IP address'),
     );
     $form['email'] = array(
       '#title' => $this->t('Email address'),
-      '#type' => 'textfield',
+      '#type' => 'email',
       '#size' => 48,
       '#defaul_value' => '',
       '#description' => $this->t('Enter email address'),
