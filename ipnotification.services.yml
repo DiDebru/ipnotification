@@ -1,6 +1,6 @@
 services:
   ipnotification.service:
     class: Drupal\ipnotification\Ipnotification
-    arguments: ['@database']
+    arguments: ['@database', '@request_stack', '@current_user', '@plugin.manager.mail']
     tags:
       - { name: backend_overridable }
