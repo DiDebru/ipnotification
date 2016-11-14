@@ -14,6 +14,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  * @package Drupal\ipnotification
  */
 class Ipnotification {
+  use StringTranslationTrait;
 
   /**
    * Database connection.
@@ -23,13 +24,37 @@ class Ipnotification {
   protected $database;
 
   /**
+   * Request->getClientInfo().
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $request;
+
+  /**
+   * User.
+   *
+   * @var \Drupal\Core\Session\AccountProxy
+   */
+  protected $user;
+
+  /**
+   * Mail Manager.
+   *
+   * @var \Drupal\Core\Mail\MailManager
+   */
+  protected $mailManager;
+
+  /**
    * Ipnotification constructor.
    *
    * @param \Drupal\Core\Database\Connection $database
    *    Database connection.
    */
-  public function __construct(Connection $database) {
+  public function __construct(Connection $database, RequestStack $request, AccountProxy $user, MailManager $mail_manager) {
     $this->database = $database;
+    $this->request = $request->getCurrentRequest();
+    $this->user = $user;
+    $this->mailManager = $mail_manager;
   }
 
   /**
