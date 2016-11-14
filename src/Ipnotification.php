@@ -124,4 +124,109 @@ class Ipnotification {
       ->execute();
   }
 
+  /**
+   * Send email to site admin.
+   *
+   * @param string $key
+   *    The mail key to check on.
+   * @param string $entity
+   *    The current entity.
+   */
+  public function sendMail($key, $entity) {
+    $module = 'ipnotification';
+    $to = \Drupal::config('system.site')->get('mail');
+    $params['title'] = $entity->label();
+    $params['user'] = $this->user->getAccountName();
+    $params['date'] = date('Y-m-d H:i:s');
+    $params['mail'] = $this->user->getEmail();
+    $params['id'] = $entity->id();
+
+    if ($key == 'entity_create') {
+      $params['message'] = $this->t('User %user created %entity %bundle %id : %title',
+        array(
+          '%title' => $params['title'],
+          '%id' => $params['id'],
+          '%user' => $params['user'],
+          '%entity' => $entity->getEntityTypeId(),
+          '%bundle' => $entity->bundle(),
+        ));
+    }
+    elseif ($key == 'entity_delete') {
+      $params['message'] = $this->t('User %user deleted %entity %bundle %id : %title',
+        array(
+          '%title' => $params['title'],
+          '%id' => $params['id'],
+          '%user' => $params['user'],
+          '%entity' => $entity->getEntityTypeId(),
+          '%bundle' => $entity->bundle(),
+        ));
+    }
+    elseif ($key = 'entity_update') {
+      $params['message'] = $this->t('User %user updated %entity %bundle %id : %title',
+        array(
+          '%title' => $params['title'],
+          '%id' => $params['id'],
+          '%user' => $params['user'],
+          '%entity' => $entity->getEntityTypeId(),
+          '%bundle' => $entity->bundle(),
+        ));
+    }
+    else {
+      if ($key = 'user_login') {
+        $params['message'] = $this->t('User %user has logged in on %date',
+          array(
+            '%user' => $params['user'],
+            '%date' => $params['date'],
+          ));
+      }
+      else {
+        $params['message'] = $this->t('User %user has logged out on %date',
+          array(
+            '%user' => $params['user'],
+            '%date' => $params['date'],
+          ));
+      }
+    }
+    $langcode = $this->user->getPreferredLangcode();
+    $send = TRUE;
+    $result = $this->mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+
+    if ($result['result'] !== TRUE) {
+      drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error');
+    }
+    else {
+      drupal_set_message(t('Your message has been sent.'));
+    }
+  }
+
+  /**
+   * Checks user IP.
+   *
+   * @return bool
+   *    Returns true if we have a match.
+   */
+  public function checkOnIp() {
+    if (in_array($this->request->getClientIp(), $this->findAllIps())) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+
+  /**
+   * Checks user mail.
+   *
+   * @return bool
+   *    Returns true if we have a match.
+   */
+  public function checkOnMail() {
+    if (in_array($this->user->getEmail(), $this->findAllEmails())) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+
 }

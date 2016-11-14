@@ -21,6 +21,106 @@ function ipnotification_help($route_name, CurrentRouteMatch $route_match) {
       return $output;
 
     default:
- }
+  }
 }
 
+/**
+ * Implements hook_mail().
+ */
+function ipnotification_mail($key, &$message, $params) {
+  $options = array(
+    'langcode' => $message['langcode'],
+  );
+  switch ($key) {
+    case 'entity_create':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('%entity created', ['%entity' => $params['title']], $options);
+      $message['body'][] = $params['message'];
+      break;
+
+    case 'entity_delete':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('%entity deleted', ['%entity' => $params['title']], $options);
+      $message['body'][] = $params['message'];
+      break;
+
+    case 'entity_update':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('%entity updated', ['%entity' => $params['title']], $options);
+      $message['body'][] = $params['message'];
+      break;
+
+    case 'user_login':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('User has logged in', $options);
+      $message['body'][] = $params['message'];
+      break;
+
+    case 'user_logout':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('User has logged out', $options);
+      $message['body'][] = $params['message'];
+      break;
+
+  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function ipnotification_entity_insert(EntityInterface $entity) {
+  /* @var \Drupal\ipnotification\Ipnotification */
+  $ipnotification = Drupal::service('ipnotification.service');
+  if ($ipnotification->checkOnIp() || $ipnotification->checkOnMail()) {
+    $ipnotification->sendMail('entity_create', $entity);
+  }
+
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function ipnotification_entity_update(EntityInterface $entity) {
+  /* @var \Drupal\ipnotification\Ipnotification */
+  $ipnotification = Drupal::service('ipnotification.service');
+  if ($ipnotification->checkOnIp() || $ipnotification->checkOnMail()) {
+    $ipnotification->sendMail('entity_update', $entity);
+
+  }
+
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function ipnotification_entity_delete(EntityInterface $entity) {
+  /* @var \Drupal\ipnotification\Ipnotification */
+  $ipnotification = Drupal::service('ipnotification.service');
+  $link = $entity->toLink();
+  if ($ipnotification->checkOnIp() || $ipnotification->checkOnMail()) {
+    $ipnotification->sendMail('entity_delete', $entity);
+  }
+
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function ipnotification_user_login($account) {
+  /* @var \Drupal\ipnotification\Ipnotification */
+  $ipnotification = Drupal::service('ipnotification.service');
+  if ($ipnotification->checkOnIp() || $ipnotification->checkOnMail()) {
+    $ipnotification->sendMail('user_login', '');
+  }
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function ipnotification_user_logout($account) {
+  /* @var \Drupal\ipnotification\Ipnotification */
+  $ipnotification = Drupal::service('ipnotification.service');
+  if ($ipnotification->checkOnIp() || $ipnotification->checkOnMail()) {
+    $ipnotification->sendMail('user_logout', '');
+  }
+}
