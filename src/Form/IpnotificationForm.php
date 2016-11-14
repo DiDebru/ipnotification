@@ -71,6 +71,7 @@ class IpnotificationForm extends FormBase {
             '#links' => $links,
           ),
         );
+
         $rowsips[] = $row;
       }
     }
@@ -90,6 +91,7 @@ class IpnotificationForm extends FormBase {
             '#links' => $links,
           ),
         );
+
         $rowsemails[] = $row;
       }
     }
